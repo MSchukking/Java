@@ -1,0 +1,41 @@
+import java.util.Scanner;  // imports the class Scanner  
+import java.util.Random;  // imports the Random class that contains the ranzomizer 
+
+public class GuessMyNumberGame {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in); // object created for users input
+		Random random = new Random(); // object created to create random number 
+		
+		// generate a random number: 
+		int random_number = random.nextInt(100) + 1; // random.nextInt(100) gives no between 0 and 99 
+													// so add 1 to get 1 and 100 including both
+		
+		// output: ask for a number: 
+		System.out.println("I\'m thinking of a number between 1 and 100 (including both).\nCan you guess what it is?"); 
+		System.out.println("Type a number: ");
+		
+		// input: assign users input into a integer variable user_input
+		int user_input = scanner.nextInt(); 
+		
+		// output the guessed number
+		System.out.println("Your guess is: " + user_input); 
+		
+		// output the generated random_number 
+		System.out.println("The number I was thinking of is: " + random_number);
+		
+		// calculate and output the absolute difference 
+		int diff_random_user = Math.abs(random_number - user_input); // Math.abs() takes the absolute difference 
+		
+		if (diff_random_user == 0) { 
+			System.out.println("Congratulations, you got it right! ");
+			
+			
+		} else { 
+			System.out.println("You were off by: " + diff_random_user); 
+			
+		}
+
+	}
+
+}
