@@ -1,0 +1,207 @@
+// Jul 21, 2022
+// Creating a easy calculator with Java code
+// This code consists of two Classes: Main.java and Calculator.java:
+
+// Main.java: 
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Calculator calc = new Calculator(); // create new instance of class Calculator
+	}
+}
+
+
+// Calculator.java 
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+
+public class Calculator implements ActionListener { // implement from interface ActionListener
+	
+	// declaring all variables that we need:
+	JFrame frame; 
+	JTextField textfield; // a text field 
+	JButton[] numberButtons = new JButton[10]; // this will hold all ten number buttons from 0 to 9
+	JButton[] functionButtons = new JButton[9]; // this will hold eight Buttons for our "/", "+", "-", etc
+	JButton addButton, subButton, mulButton, divButton; // naming all eight buttons that we need
+	JButton decButton, equButton, delButton, clrButton, negButton; 
+	JPanel panel; // create a JPanel to hold all buttons that we need
+	Font myFont = new Font("Ink Free", Font.BOLD, 30); // declaring one font for all by buttons
+	double num1 = 0, num2 = 0, result = 0;  // declaring a few double values
+	char operator; // declaring a character value for "*", "/", "+", "-", etc. 
+	
+	Calculator(){
+		// declaring the constructor 
+		
+		//1) declare all methods part of the frame 
+		frame = new JFrame("Calculator");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allowing us to close out of the program 
+		frame.setSize(420, 550 ); // setting the width and height of our program 
+		frame.setLayout(null); // setting to NO layout manager (for all buttons we will use a grid layout, but we will take care of that later
+		
+		//2) declaring all methods part of instantiating the textfield which holds all the number and the result
+		textfield = new JTextField(); 
+		textfield.setBounds(50, 25, 300, 50); // x, y, width, height: setting the bounds for the textfield since we are not using a layout manager
+		textfield.setFont(myFont);  // set the fond of the textfield
+		textfield.setEditable(false); // setting textfield so that we cannot type the in the textfield (we only want the numbers on the screen to be added) 
+		
+		// 3) adding the symbols for the nine function buttons 
+		addButton = new JButton("+");
+		subButton = new JButton("-");
+		mulButton = new JButton("*");
+		divButton = new JButton("/");
+		decButton = new JButton("."); 
+		equButton = new JButton("=");
+		delButton = new JButton("Delete");
+		clrButton = new JButton("Clear"); 
+		negButton = new JButton("(-)"); 
+		
+		// adding all of these buttons to our array functionButtons
+		functionButtons[0] = addButton;
+		functionButtons[1] = subButton;
+		functionButtons[2] = mulButton;
+		functionButtons[3] = divButton; 
+		functionButtons[4] = decButton;
+		functionButtons[5] = equButton;
+		functionButtons[6] = delButton;
+		functionButtons[7] = clrButton; 
+		functionButtons[8] = negButton; 
+		
+		// use a for loop to iterate through these buttons
+		for(int i = 0; i < 9; i++) { // during each iterations (for each functionButtons) do the following things: 
+			functionButtons[i].addActionListener(this); // change functionButtons to addActionListener 
+			functionButtons[i].setFont(myFont); // set font
+			functionButtons[i].setFocusable(false); // when you click on a button(or like somewhere in a text) it might mark the text or button. Now you set this off cause can be annoying 
+		}
+		
+		// 4) adding the ten number buttons 
+		// for loop to iterate through the ten number buttons:
+		for(int i = 0; i < 10; i++) {
+			numberButtons[i] = new JButton(String.valueOf(i)); // adding the number buttons/ make instances of the ten number buttons: 
+			numberButtons[i].addActionListener(this); 
+			numberButtons[i].setFont(myFont);
+			numberButtons[i].setFocusable(false); 
+		}
+		
+		// 5) adding the delete button and clear button wont be on the layout/frame (make them 100 pixels)
+		negButton.setBounds(50, 430, 80, 50);
+		delButton.setBounds(120, 430, 130, 50); // setting location for delButton(these location numbers were decided/calculated before hand)
+		clrButton.setBounds(250, 430, 110, 50); // setting location for clrButton
+		
+		// 6) creating the panel where we add the buttons 
+		panel = new JPanel(); 
+		panel.setBounds(50, 100, 300, 300);  // a square
+		panel.setLayout(new GridLayout(4, 4, 10, 10));   // set to grid layout (rows, columns, how much spaces between rows, how much spaces between columns)
+		// panel.setBackground(Color.GRAY); // color background temporary so that we can see this panel 
+		
+		// 7) add all our function buttons and number buttons to our panel: in the order that we place them 
+		panel.add(numberButtons[1]); // number 1
+		panel.add(numberButtons[2]); // number 2
+		panel.add(numberButtons[3]); // number 3
+		panel.add(addButton); // add button
+		panel.add(numberButtons[4]);
+		panel.add(numberButtons[5]);
+		panel.add(numberButtons[6]);
+		panel.add(subButton); 
+		panel.add(numberButtons[7]);
+		panel.add(numberButtons[8]);
+		panel.add(numberButtons[9]);
+		panel.add(mulButton);
+		panel.add(decButton);
+		panel.add(numberButtons[0]);
+		panel.add(equButton);
+		panel.add(divButton);
+		
+		// 8) adding all the information to the frame 
+		frame.add(panel); // adding panel to the frame 
+		frame.add(negButton); // adding the negative button to the frame 
+		frame.add(delButton); // adding delButton to the frame
+		frame.add(clrButton); // adding the clrButton to the frame 
+		frame.add(textfield); // adding the textfield to the frame 
+		frame.setVisible(true); // NEEDS TO BE AT THE END OF THE CONSTRUCTOR: setting the visibility to true
+	}
+	
+	
+	@Override // for interface ActionListener
+	public void actionPerformed(ActionEvent e) {
+		// adding functionality to the buttons 
+		
+		for(int i = 0; i < 10; i++) { // iterating 10 times. Then adds the number clicked to the textfield 
+			if(e.getSource() == numberButtons[i]) { 
+				textfield.setText(textfield.getText().concat(String.valueOf(i)));
+			}
+		}
+		// adding functionality to the decimal button:
+		if(e.getSource() == decButton) {
+			textfield.setText(textfield.getText().concat("."));
+		}
+		// adding functionality to the add button:
+		if(e.getSource() == addButton) {
+			num1 = Double.parseDouble(textfield.getText());  // retrieve number 1
+			operator = '+'; // assign operator to the character + 
+			textfield.setText(""); // clear the textfield to empty set of quotes. 
+		}
+		// adding functionality to the substraction button
+		if(e.getSource() == subButton) {
+			num1 = Double.parseDouble(textfield.getText());
+			operator = '-';
+			textfield.setText(""); 
+		}
+		// adding functionality to the multiply button:
+		if(e.getSource() == mulButton) {
+			num1 = Double.parseDouble(textfield.getText());
+			operator = '*';
+			textfield.setText("");
+		}
+		// adding functionality to the division button:
+		if(e.getSource() == divButton) { 
+			num1 = Double.parseDouble(textfield.getText());
+			operator = '/';
+			textfield.setText("");
+		}
+		// adding functionality to equals button (mathematical procedures!) 
+		if(e.getSource() == equButton) {
+			num2 = Double.parseDouble(textfield.getText());
+			
+			switch(operator) { // switch determines with mathemetical operation we will perform depending on the operator 
+			case '+':
+				result = num1 + num2;
+				break;
+			case '-': 
+				result = num1 - num2;
+				break;
+			case '*':
+				result = num1 * num2;
+				break;
+			case '/':
+				result = num1 / num2;
+				break; 
+			}
+			// update the textfield:
+			textfield.setText(String.valueOf(result));
+			num1 = result; // result = num1 so that we can continue if we want to use the same number 
+		}
+		// adding functionality to the clear button:
+		if(e.getSource() == clrButton) {
+			textfield.setText("");  // set text to empty
+		}
+		// adding functionality to the delete button:
+		if(e.getSource() == delButton) {
+			String string = textfield.getText();  // get a string variable that is what is in the textfield
+			textfield.setText("");  // clear textfield temporary 
+			for(int i = 0; i < string.length() - 1; i++) { // for loop that iterates through the length of the string minus 1 
+				textfield.setText(textfield.getText() + string.charAt(i)); // during each iterations we take the textfield and set the text to character i 
+			}
+		}
+		// adding functionality to negative button:
+		if(e.getSource() == negButton) {
+			double temp = Double.parseDouble(textfield.getText());  // retrieve whatever text is in the textfield and assign it to "temp"
+			temp *= -1; // multiply temp by * -1 (easyest way to make a number negative)
+			textfield.setText(String.valueOf(temp));
+		}
+	}
+}
